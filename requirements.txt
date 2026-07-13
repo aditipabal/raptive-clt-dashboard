@@ -2,3 +2,4 @@ streamlit>=1.36
 numpy>=1.26
 scipy>=1.13
 plotly>=5.22
+matplotlib
