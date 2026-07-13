@@ -15,9 +15,6 @@ st.set_page_config(
 # App Title & Description
 st.title("📊 Central Limit Theorem Interactive Dashboard")
 st.markdown(r"""
-This interactive dashboard demonstrates the **Central Limit Theorem (CLT)** in action.
-The CLT is one of the most fundamental theorems in statistics. It states that, for any population with a finite mean $\mu$ and finite standard deviation $\sigma$,
-the sampling distribution of the sample mean ($\bar{X}$) approaches a normal distribution with mean $\mu$ and standard error $\sigma / \sqrt{n}$ as the sample size $n$ becomes large,
 This interactive dashboard demonstrates the **Central Limit Theorem (CLT)** in action. 
 The CLT is one of the most fundamental theorems in statistics. It states that, for any population with a finite mean $\mu$ and finite standard deviation $\sigma$, 
 the sampling distribution of the sample mean ($\bar{X}$) approaches a normal distribution with mean $\mu$ and standard error $\sigma / \sqrt{n}$ as the sample size $n$ becomes large, 
@@ -39,29 +36,6 @@ st.sidebar.subheader("Adjust Distribution Parameters")
 if dist_choice == "Normal":
     mu = st.sidebar.slider("Mean (μ)", min_value=-50.0, max_value=50.0, value=0.0, step=0.5)
     sigma = st.sidebar.slider("Standard Deviation (σ)", min_value=0.1, max_value=20.0, value=1.0, step=0.1)
-
-    pop_mean = mu
-    pop_std = sigma
-    dist_label = f"Normal(μ={mu}, σ={sigma})"
-
-elif dist_choice == "Uniform":
-    a = st.sidebar.slider("Minimum (a)", min_value=-50.0, max_value=50.0, value=0.0, step=0.5)
-    b = st.sidebar.slider("Maximum (b)", min_value=a + 0.5, max_value=a + 100.0, value=a + 10.0, step=0.5)
-
-    pop_mean = (a + b) / 2
-    pop_std = np.sqrt((b - a)**2 / 12)
-    dist_label = f"Uniform(a={a}, b={b})"
-
-elif dist_choice == "Exponential":
-    beta = st.sidebar.slider("Scale (β = 1/λ)", min_value=0.1, max_value=20.0, value=2.0, step=0.1)
-
-    pop_mean = beta
-    pop_std = beta
-    dist_label = f"Exponential(β={beta}, λ={round(1/beta, 3)})"
-
-elif dist_choice == "Poisson":
-    lam = st.sidebar.slider("Rate (λ)", min_value=0.5, max_value=30.0, value=4.0, step=0.5)
-
     
     pop_mean = mu
     pop_std = sigma
@@ -123,7 +97,7 @@ else:
 def run_simulation(dist_name, n, N, params, seed=None):
     if seed is not None:
         np.random.seed(seed)
-
+        
     if dist_name == "Normal":
         mu, sigma = params
         samples = np.random.normal(loc=mu, scale=sigma, size=(N, n))
@@ -136,7 +110,7 @@ def run_simulation(dist_name, n, N, params, seed=None):
     elif dist_name == "Poisson":
         lam = params[0]
         samples = np.random.poisson(lam=lam, size=(N, n))
-
+        
     sample_means = np.mean(samples, axis=1)
     return samples, sample_means
 
@@ -209,19 +183,19 @@ if dist_choice == "Normal":
     y_pop = stats.norm.pdf(x_pop, loc=mu, scale=sigma)
     ax1.plot(x_pop, y_pop, color=color_pop, lw=3, label="Theoretical PDF")
     ax1.fill_between(x_pop, y_pop, color=color_pop, alpha=0.3)
-
+    
 elif dist_choice == "Uniform":
     x_pop = np.linspace(a - (b-a)*0.1, b + (b-a)*0.1, 1000)
     y_pop = stats.uniform.pdf(x_pop, loc=a, scale=b-a)
     ax1.plot(x_pop, y_pop, color=color_pop, lw=3, label="Theoretical PDF")
     ax1.fill_between(x_pop, y_pop, color=color_pop, alpha=0.3)
-
+    
 elif dist_choice == "Exponential":
     x_pop = np.linspace(0, 5*pop_mean, 1000)
     y_pop = stats.expon.pdf(x_pop, scale=beta)
     ax1.plot(x_pop, y_pop, color=color_pop, lw=3, label="Theoretical PDF")
     ax1.fill_between(x_pop, y_pop, color=color_pop, alpha=0.3)
-
+    
 elif dist_choice == "Poisson":
     # Since Poisson is discrete, we use a bar plot for PMF
     max_k = int(max(stats.poisson.ppf(0.999, mu=lam), 10))
@@ -241,12 +215,12 @@ se = pop_std / np.sqrt(n)
 
 # Plot empirical histogram of sample means
 count, bins, ignored = ax2.hist(
-    sample_means,
-    bins=50,
-    density=True,
-    color=color_samp,
-    alpha=0.6,
-    edgecolor="black",
+    sample_means, 
+    bins=50, 
+    density=True, 
+    color=color_samp, 
+    alpha=0.6, 
+    edgecolor="black", 
     label="Simulated Sample Means"
 )
 
@@ -301,7 +275,7 @@ st.markdown(r"""
 
 1. **The Shape of the Sampling Distribution**:
    As the sample size $n$ increases, the sampling distribution of the sample mean ($\bar{{X}}$) approaches a **Normal Distribution**, regardless of the shape of the population distribution (even if it's heavily skewed like the Exponential distribution or discrete like the Poisson distribution).
-
+   
 2. **The Center of the Sampling Distribution**:
    The mean of the sampling distribution ($\mu_{{\bar{{X}}}}$) is equal to the mean of the population ($\mu$):
    $$\mu_{{\bar{{X}}}} = \mu$$
