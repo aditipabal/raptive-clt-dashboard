@@ -18,6 +18,9 @@ st.markdown(r"""
 This interactive dashboard demonstrates the **Central Limit Theorem (CLT)** in action.
 The CLT is one of the most fundamental theorems in statistics. It states that, for any population with a finite mean $\mu$ and finite standard deviation $\sigma$,
 the sampling distribution of the sample mean ($\bar{X}$) approaches a normal distribution with mean $\mu$ and standard error $\sigma / \sqrt{n}$ as the sample size $n$ becomes large,
+This interactive dashboard demonstrates the **Central Limit Theorem (CLT)** in action. 
+The CLT is one of the most fundamental theorems in statistics. It states that, for any population with a finite mean $\mu$ and finite standard deviation $\sigma$, 
+the sampling distribution of the sample mean ($\bar{X}$) approaches a normal distribution with mean $\mu$ and standard error $\sigma / \sqrt{n}$ as the sample size $n$ becomes large, 
 **regardless of the shape of the original population distribution**.
 """)
 
@@ -59,6 +62,29 @@ elif dist_choice == "Exponential":
 elif dist_choice == "Poisson":
     lam = st.sidebar.slider("Rate (λ)", min_value=0.5, max_value=30.0, value=4.0, step=0.5)
 
+    
+    pop_mean = mu
+    pop_std = sigma
+    dist_label = f"Normal(μ={mu}, σ={sigma})"
+    
+elif dist_choice == "Uniform":
+    a = st.sidebar.slider("Minimum (a)", min_value=-50.0, max_value=50.0, value=0.0, step=0.5)
+    b = st.sidebar.slider("Maximum (b)", min_value=a + 0.5, max_value=a + 100.0, value=a + 10.0, step=0.5)
+    
+    pop_mean = (a + b) / 2
+    pop_std = np.sqrt((b - a)**2 / 12)
+    dist_label = f"Uniform(a={a}, b={b})"
+    
+elif dist_choice == "Exponential":
+    beta = st.sidebar.slider("Scale (β = 1/λ)", min_value=0.1, max_value=20.0, value=2.0, step=0.1)
+    
+    pop_mean = beta
+    pop_std = beta
+    dist_label = f"Exponential(β={beta}, λ={round(1/beta, 3)})"
+    
+elif dist_choice == "Poisson":
+    lam = st.sidebar.slider("Rate (λ)", min_value=0.5, max_value=30.0, value=4.0, step=0.5)
+    
     pop_mean = lam
     pop_std = np.sqrt(lam)
     dist_label = f"Poisson(λ={lam})"
